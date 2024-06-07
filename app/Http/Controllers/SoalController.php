@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Soal;
 use App\Models\User;
 use App\Models\Hasil;
@@ -480,8 +481,20 @@ class SoalController extends Controller
                 $jam_ujian = $data_penguji->penguji_3->jam_ujian ?? 'Belum Ada';
             }
 
-            $data['tanggal_ujian'] = $tanggal_ujian;
-            $data['jam_ujian'] = $jam_ujian;
+            if ($tanggal_ujian == 'Belum Ada' || $jam_ujian == 'Belum Ada') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Get Data Gagal, Anda Sudah Mengerjakan Ujian',
+                    'data' => null
+                ], 404);
+            }
+
+            $datetime_ujian = $tanggal_ujian . ' ' . $jam_ujian;
+            $waktu_mulai = Carbon::createFromFormat('Y-m-d H:i:s', $datetime_ujian);
+            $durasi = $matkul->durasi;
+
+            $waktu_selesai = $waktu_mulai->copy()->addMinutes($durasi);
+            $data['waktu_selesai'] = $waktu_selesai->toDateTimeString();
 
             return response()->json([
                 'success' => true,
