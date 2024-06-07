@@ -1,0 +1,36 @@
+table.dataTable td {
+    padding: 15px 8px;
+}
+.fontawesome-icons .the-icon svg {
+    font-size: 24px;
+}
+#table1_length label {
+    display: inline-flex;
+    margin-bottom: 10px;
+}
+#table1_length select {
+    margin: 0px 10px;
+}
+#table1_filter {
+    display: flex;
+    justify-content: right;
+}
+#table1_filter label {
+    margin-bottom: 10px;
+    display: flex;
+}
+#table1_filter label input {
+    margin-left: 10px;
+}
+#table1 {
+    margin-top: 10px;
+}
+#table1_info,
+#table1_paginate {
+    margin-top: 20px;
+}
+#table1_paginate {
+    margin-left: auto;
+    display: flex;
+    justify-content: right;
+}

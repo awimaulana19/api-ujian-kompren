@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+* {
+    font-family: poppins;
+}
+
+#dashboard .title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 0px;
+}
+#dashboard .subtitle {
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 14px;
+}
+#dashboard img {
+    border-radius: 8px;
+}

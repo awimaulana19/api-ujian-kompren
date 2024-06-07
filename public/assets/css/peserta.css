@@ -1,0 +1,309 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+* {
+    font-family: poppins;
+}
+.main-content-peserta {
+    padding-top: 100px;
+}
+header {
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+aside {
+    padding: 24px;
+    margin-top: 50px;
+    background: #774fe4;
+    border-radius: 10px;
+    height: 74vh;
+    width: 210px;
+}
+aside a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    color: #fff;
+    line-height: 21px;
+    transition: all ease-in-out 0.3s;
+}
+aside a:hover {
+    color: #1e1e1e;
+    transition: all ease-in-out 0.3s;
+}
+.active {
+    color: #774fe4;
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+}
+
+.main-content-peserta .content {
+    padding: 52px 0px 34px 60px;
+}
+
+.dashboard .img-utama {
+    width: 100px;
+}
+.dashboard .img-data {
+    width: 60px;
+}
+.dashboard .email {
+    margin-bottom: 3px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+}
+.dashboard .nama {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+}
+.dashboard .btn-data {
+    color: #fff;
+    background-color: #774fe4;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    padding: 12px 34px;
+    margin-left: auto;
+}
+.test .halaman {
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    height: 74vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.test .halaman p {
+    margin-bottom: 10px;
+    font-weight: 400;
+    font-size: 16px;
+    color: #1e1e1e;
+}
+
+.test .halaman h2 {
+    font-weight: 400;
+    font-size: 28px;
+    color: #1e1e1e;
+}
+
+.test .halaman h2 span {
+    color: #d14130;
+}
+
+.test .halaman .btn-ungu {
+    width: 200px;
+    height: 40px;
+    margin-top: 15px;
+    background: #774fe4;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.test .halaman .btn-ungu:hover {
+    transition: ease-in 0.3s;
+    background: #6737eb;
+}
+
+.webcam video {
+    width: 350px;
+    height: 230px;
+    border: 2px solid black;
+    position: absolute;
+    top: 64%;
+    right: 73%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.test .semua {
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+    height: 74vh;
+    overflow: auto;
+}
+
+.test .semua .soal {
+    width: 47%;
+    margin-top: 20px;
+    margin-left: 20px;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+    height: 228px;
+    overflow: auto;
+}
+
+.test .semua .soal h5 {
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000;
+}
+
+.test .semua .soal p:first-child {
+    display: inline-block;
+}
+
+.test .semua .soal p {
+    margin: 0;
+    padding: 0;
+}
+
+.test .semua .soal .pilih {
+    margin-left: 10px;
+    margin-top: 20px;
+}
+
+.test .semua .soal .form-check-label {
+    font-weight: 400;
+    font-size: 14px;
+    color: #4f4e4e;
+}
+.dashboard .form-control,
+.dashboard select {
+    padding: 12px 20px 12px 20px;
+    border-radius: 39px;
+}
+.dashboard label,
+.dashboard select,
+input::placeholder {
+    color: #4f4e4e;
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+}
+
+.pengumuman .card {
+    height: 74vh;
+}
+.pengumuman .card-pengumuman {
+    background-color: #00b270;
+    margin-top: 16%;
+    padding: 25px;
+    border-radius: 20px;
+}
+.pengumuman .card-pengumuman p {
+    font-family: Poppins;
+    font-size: 20px;
+    line-height: 30px;
+}
+.pengumuman .card-pengumuman .btn-hub {
+    background-color: #fff;
+    color: #00b270;
+    display: block;
+    justify-content: center;
+    margin: 20px auto 8px auto;
+    max-width: 200px;
+    font-size: 14px;
+    padding: 12px;
+    font-weight: 500;
+    line-height: 21px;
+}
+.pengumuman .card-pengumuman i {
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 18px;
+}
+.fix-dashboard {
+    position: fixed;
+}
+.of-canvas {
+    display: none;
+}
+.offcanvas a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    transition: all ease-in-out 0.3s;
+}
+.offcanvas a:hover {
+    color: #1e1e1e;
+    transition: all ease-in-out 0.3s;
+}
+.offcanvas .active {
+    color: #fff;
+    background: #774fe4;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+}
+.btn-canvas {
+    background-color: #774fe4;
+    color: #fff;
+}
+.dashboard .isi-data p {
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+@media (max-width: 767.98px) {
+    .main-content-peserta {
+        padding-top: 80px;
+    }
+    .main-content-peserta .content {
+        padding: 10px 10px 10px 10px;
+        contain: content;
+    }
+    .fix-dashboard {
+        position: absolute;
+        display: none;
+    }
+    .of-canvas {
+        display: block;
+    }
+    .dashboard .isi-data p {
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+    .dashboard input,
+    .dashboard label,
+    .dashboard select {
+        font-size: 12px;
+    }
+    .dashboard .isi-data input::placeholder {
+        font-size: 12px;
+    }
+    .pengumuman .card-pengumuman {
+        background-color: #00b270;
+        margin-top: 16%;
+        padding: 24px 0px;
+        border-radius: 20px;
+    }
+    .pengumuman .card-pengumuman p {
+        font-size: 16px;
+        line-height: 30px;
+    }
+    .test .semua .soal {
+        width: 100%;
+        margin-top: 20px;
+        margin-left: 0px;
+        padding: 20px;
+        background: #ffffff;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 12px;
+        height: 228px;
+        overflow: auto;
+    }
+}

@@ -1,0 +1,139 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+* {
+    font-family: poppins;
+}
+
+header {
+    padding: 16px 0px;
+    background-color: #fff;
+}
+header .header-logo {
+    width: 264px;
+}
+header .header-sponsor {
+    margin: 0px auto;
+    gap: 30px;
+    justify-content: end;
+}
+header .header-sponsor img {
+    width: 60px;
+    height: 60px;
+}
+
+nav {
+    background-color: #774fe4;
+}
+.nav-md {
+    display: none;
+}
+nav ul {
+    gap: 20px;
+    margin-left: -8px;
+}
+nav ul li .nav-link {
+    color: #fff;
+}
+nav .tombol {
+    padding: 16px 0px;
+}
+nav .btn-login {
+    color: #fff;
+    margin-right: 16px;
+    text-decoration: underline;
+}
+nav .btn-daftar {
+    background-color: #fff;
+    border-radius: 30px;
+    padding: 14px 42px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+}
+#hero {
+    background-color: #774fe4;
+    padding-bottom: 80px;
+}
+#hero img {
+    margin: 0px auto;
+    display: block;
+    width: 700px;
+}
+#login {
+    padding-top: 20px;
+    height: 80vh;
+    background-color: #774fe4;
+}
+#login .title {
+    font-size: 24px;
+    margin: 0;
+    font-weight: 600;
+    color: #fff;
+}
+#login .subtitle,
+#login label {
+    font-size: 16px;
+    color: #fff;
+    font-weight: 400;
+}
+#login input {
+    padding: 16px 0px 16px 40px;
+    border-radius: 40px;
+}
+#login form {
+    margin-top: 20px;
+}
+#login .btn-masuk {
+    font-size: 16px;
+    border-radius: 8px;
+    padding: 16px 66px;
+    font-weight: 600;
+    line-height: 21px;
+    color: #774fe4;
+    background-color: #fff;
+}
+.btn-canvas {
+    background-color: #774fe4;
+    border: 0px;
+    margin-right: 10px;
+    color: #fff;
+}
+.btn-canvas:hover {
+    background-color: #774fe4;
+    color: #fff;
+}
+
+@media (max-width: 767.98px) {
+    nav {
+        display: none;
+    }
+    .nav-md {
+        margin-top: -2px;
+        background-color: #774fe4;
+        display: grid;
+    }
+    .nav-md .navbar-canvas a {
+        color: #774fe4;
+    }
+    nav ul {
+        gap: 4px;
+        margin-left: 0px;
+    }
+    header {
+        padding: 14px 0px;
+    }
+    header .header-logo {
+        width: 160px;
+    }
+    header .header-sponsor {
+        gap: 16px;
+    }
+    header .header-sponsor img {
+        width: 40px;
+        height: 40px;
+    }
+    #hero img {
+        width: 340px;
+    }
+}
