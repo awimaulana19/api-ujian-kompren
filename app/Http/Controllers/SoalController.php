@@ -341,8 +341,8 @@ class SoalController extends Controller
             ], 404);
         }
 
-        $finish->finish_date = null;
-        $finish->finish_time = null;
+        $finish->durasi = null;
+        $finish->jumlah_soal = null;
         $finish->update();
 
         $finish->makeHidden(['created_at', 'updated_at']);
@@ -490,11 +490,43 @@ class SoalController extends Controller
             }
 
             $datetime_ujian = $tanggal_ujian . ' ' . $jam_ujian;
-            $waktu_mulai = Carbon::createFromFormat('Y-m-d H:i:s', $datetime_ujian);
+            $formats = [
+                'Y-m-d H:i',
+                'Y/m/d H:i',
+            ];
+
+            $waktu_mulai = null;
+            foreach ($formats as $format) {
+                try {
+                    $waktu_mulai = Carbon::createFromFormat($format, $datetime_ujian);
+                    break;
+                } catch (\Exception $e) {
+                    continue;
+                }
+            }
+
+            if (!$waktu_mulai) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Format Tanggal Ujian Salah',
+                    'data' => null
+                ], 404);
+            }
+
             $durasi = $matkul->durasi;
 
             $waktu_selesai = $waktu_mulai->copy()->addMinutes($durasi);
-            $data['waktu_selesai'] = $waktu_selesai->toDateTimeString();
+
+            if ($waktu_selesai->isPast()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Waktu habis',
+                    'data' => null
+                ], 404);
+            }
+
+            $data['tanggal_selesai'] = $waktu_selesai->format('Y-m-d');
+            $data['jam_selesai'] = $waktu_selesai->format('H:i');
 
             return response()->json([
                 'success' => true,

@@ -161,13 +161,28 @@ class MahasiswaController extends Controller
 
     public function atur_jadwal_api(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'matkul_id' => 'required',
+            'tanggal_ujian' => 'required',
+            'jam_ujian' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Update Waktu Mulai Ujian Gagal',
+                'data' => $validator->errors()
+            ], 404);
+        }
+
         $dosen = Auth::user();
         $user = User::where('id', $request->user_id)->first();
 
         if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get Data Gagal, User Tidak Ditemukan',
+                'message' => 'Post Data Gagal, User Tidak Ditemukan',
                 'data' => null
             ], 404);
         }
@@ -194,7 +209,7 @@ class MahasiswaController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Get Data Berhasil',
+            'message' => 'Post Data Berhasil',
             'data' => $user
         ]);
     }
