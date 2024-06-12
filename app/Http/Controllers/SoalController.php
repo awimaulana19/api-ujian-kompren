@@ -260,7 +260,9 @@ class SoalController extends Controller
             if ($request->file('gambar_jawaban') && isset($request->file('gambar_jawaban')[$index])) {
                 $jawaban->gambar_jawaban = $request->file('gambar_jawaban')[$index]->store('gambar-jawaban');
             } else {
-                $jawaban->gambar_jawaban = $request->gambar_jawaban_lama[$index];
+                $parts = explode('/', $request->gambar_jawaban_lama[$index]);
+                $gambar_jawaban_lama = implode('/', array_slice($parts, 4));
+                $jawaban->gambar_jawaban = $gambar_jawaban_lama;
             }
             $jawaban->save();
         }
