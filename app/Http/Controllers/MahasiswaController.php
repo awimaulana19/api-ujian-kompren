@@ -35,6 +35,13 @@ class MahasiswaController extends Controller
         return view('Admin.Mahasiswa.index', compact('user', 'dosen'));
     }
 
+    public function nilai_ujian()
+    {
+        $user = User::where('roles', 'mahasiswa')->where('is_verification', 1)->get();
+        $dosen = User::where('roles', 'dosen')->get();
+        return view('Admin.Mahasiswa.index', compact('user', 'dosen'));
+    }
+
     public function update(Request $request, $id)
     {
         if ($request->is_verification == 0) {
@@ -530,7 +537,7 @@ class MahasiswaController extends Controller
         $request = (object)[
             'dosen_penguji' => $matkul->user->nama,
             'mata_kuliah_id' => $matkul->id,
-            'mata_kuliah' => $matkul->nama,
+            'mata_kuliah' => $matkul->matakuliah->nama,
             'nama_mahasiswa' => $user->nama,
             'nim_mahasiswa' => $user->username,
             'nilai_angka' => $nilai_asli

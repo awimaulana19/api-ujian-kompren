@@ -60,6 +60,11 @@
                              <div data-i18n="Tolak">Di Tolak</div>
                          </a>
                      </li>
+                     <li class="menu-item {{ request()->is('admin/mahasiswa/nilai-ujian*') ? 'active' : '' }}">
+                         <a href="/admin/mahasiswa/nilai-ujian" class="menu-link">
+                             <div data-i18n="Sudah">Nilai Ujian</div>
+                         </a>
+                     </li>
                  </ul>
              </li>
              <li class="menu-header small text-uppercase">

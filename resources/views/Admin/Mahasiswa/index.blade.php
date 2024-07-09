@@ -16,8 +16,14 @@
                                 <th class="text-center">No</th>
                                 <th class="text-center">Nama</th>
                                 <th class="text-center">Username/Nim</th>
-                                <th class="text-center">Sk Kompren</th>
-                                <th class="text-center">Action</th>
+                                @if (request()->is('admin/mahasiswa/nilai-ujian*'))
+                                    <th class="text-center">Penguji 1</th>
+                                    <th class="text-center">Penguji 2</th>
+                                    <th class="text-center">Penguji 3</th>
+                                @else
+                                    <th class="text-center">Sk Kompren</th>
+                                    <th class="text-center">Action</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -26,141 +32,173 @@
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td class="text-center">{{ $item->nama }}</td>
                                     <td class="text-center"><span>{{ $item->username }}</span></td>
-                                    <td class="text-center">
-                                        <a class="text-decoration-underline"
-                                            href="{{ asset('storage/skKompren/' . $item->sk_kompren) }}"
-                                            target="_blank">Lihat
-                                            SK Kompren
-                                        </a>
-                                    </td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal{{ $item->id }}">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
+                                    @if (request()->is('admin/mahasiswa/nilai-ujian*'))
+                                        @php
+                                            $nilai = json_decode($item->nilai, true);
+                                        @endphp
+                                        <td class="text-center">
+                                            @if ($nilai['nilai_penguji_1']['nilai_ujian'] !== null)
+                                                {{ $nilai['nilai_penguji_1']['nilai_ujian'] }}
+                                            @else
+                                                Belum Ada Nilai
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($nilai['nilai_penguji_2']['nilai_ujian'] !== null)
+                                                {{ $nilai['nilai_penguji_2']['nilai_ujian'] }}
+                                            @else
+                                                Belum Ada Nilai
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($nilai['nilai_penguji_3']['nilai_ujian'] !== null)
+                                                {{ $nilai['nilai_penguji_3']['nilai_ujian'] }}
+                                            @else
+                                                Belum Ada Nilai
+                                            @endif
+                                        </td>
+                                    @else
+                                        <td class="text-center">
+                                            <a class="text-decoration-underline"
+                                                href="{{ asset('storage/skKompren/' . $item->sk_kompren) }}"
+                                                target="_blank">Lihat
+                                                SK Kompren
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#exampleModal{{ $item->id }}">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
 
-                                        <a href="/admin/mahasiswa/delete/{{ $item->id }}" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Apakah Anda yakin ingin menghapus item ini?')">
-                                            <i class="bx bx-trash"></i>
-                                        </a>
-                                    </td>
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModal{{ $item->id }}" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Verifikasi Akun
-                                                    </h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="/admin/mahasiswa/update/{{ $item->id }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        <div class="mb-3">
-                                                            <label for="" class="form-label">Username</label>
-                                                            <input type="text" value="{{ $item->username }}" disabled
-                                                                class="form-control" />
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="is_verification" class="form-label">Status
-                                                                Akun</label>
-                                                            <select name="is_verification"
-                                                                id="is_verification{{ $item->id }}" class="form-select">
-                                                                <option value="0" data-tolak="false"
-                                                                    {{ $item->is_verification == '0' ? 'selected' : '' }}>
-                                                                    Belum Verifikasi</option>
-                                                                <option value="1" data-tolak="false"
-                                                                    {{ $item->is_verification == '1' ? 'selected' : '' }}>
-                                                                    Verifikasi</option>
-                                                                <option class="tolak" value="0" data-tolak="true"
-                                                                    {{ $item->is_verification == '0' && $item->tolak ? 'selected' : '' }}>
-                                                                    Tolak</option>
-                                                            </select>
-                                                        </div>
-                                                        <div id="tolakTextareaContainer{{ $item->id }}"
-                                                            style="display: none;" class="mb-3">
-                                                            <label for="tolak" class="form-label">Alasan
-                                                                Penolakan</label>
-                                                            <textarea id="tolak{{ $item->id }}" required name="tolak" class="form-control" rows="3"></textarea>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            @php
-                                                                $penguji = json_decode($item->penguji);
-                                                            @endphp
-                                                            <label for="penguji_1{{ $item->id }}"
-                                                                class="form-label">Penguji 1</label>
-                                                            <select name="penguji_1" id="penguji_1{{ $item->id }}"
-                                                                class="form-select"
-                                                                onchange="updateMatkul1{{ $item->id }}()">
-                                                                <option value="">Pilih Dosen</option>
-                                                                @foreach ($dosen as $row)
-                                                                    <option value="{{ $row->id }}"
-                                                                        {{ $row->id == $penguji->penguji_1->user_id ? 'selected' : '' }}>
-                                                                        {{ $row->nama }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            <select name="matkul_1" id="matkul_1{{ $item->id }}"
-                                                                class="form-select mt-2">
-                                                                <option value="">Pilih Matkul</option>
-                                                            </select>
-                                                            <input type="hidden" id="value_matkul_1{{ $item->id }}"
-                                                                value="{{ $penguji->penguji_1->matkul_id }}">
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="penguji_2{{ $item->id }}"
-                                                                class="form-label">Penguji 2</label>
-                                                            <select name="penguji_2" id="penguji_2{{ $item->id }}"
-                                                                class="form-select"
-                                                                onchange="updateMatkul2{{ $item->id }}()">
-                                                                <option value="">Pilih Dosen</option>
-                                                                @foreach ($dosen as $row)
-                                                                    <option value="{{ $row->id }}"
-                                                                        {{ $row->id == $penguji->penguji_2->user_id ? 'selected' : '' }}>
-                                                                        {{ $row->nama }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            <select name="matkul_2" id="matkul_2{{ $item->id }}"
-                                                                class="form-select mt-2">
-                                                                <option value="">Pilih Matkul</option>
-                                                            </select>
-                                                            <input type="hidden" id="value_matkul_2{{ $item->id }}"
-                                                                value="{{ $penguji->penguji_2->matkul_id }}">
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="penguji_3{{ $item->id }}"
-                                                                class="form-label">Penguji 3</label>
-                                                            <select name="penguji_3" id="penguji_3{{ $item->id }}"
-                                                                class="form-select"
-                                                                onchange="updateMatkul3{{ $item->id }}()">
-                                                                <option value="">Pilih Dosen</option>
-                                                                @foreach ($dosen as $row)
-                                                                    <option value="{{ $row->id }}"
-                                                                        {{ $row->id == $penguji->penguji_3->user_id ? 'selected' : '' }}>
-                                                                        {{ $row->nama }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            <select name="matkul_3" id="matkul_3{{ $item->id }}"
-                                                                class="form-select mt-2">
-                                                                <option value="">Pilih Matkul</option>
-                                                            </select>
-                                                            <input type="hidden" id="value_matkul_3{{ $item->id }}"
-                                                                value="{{ $penguji->penguji_3->matkul_id }}">
-                                                        </div>
-                                                        <div class="d-flex justify-content-end gap-2">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit"
-                                                                class="btn btn-primary">Verifikasi</button>
-                                                        </div>
-                                                    </form>
+                                            <a href="/admin/mahasiswa/delete/{{ $item->id }}"
+                                                class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus item ini?')">
+                                                <i class="bx bx-trash"></i>
+                                            </a>
+                                        </td>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal{{ $item->id }}" tabindex="-1"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Verifikasi Akun
+                                                        </h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="/admin/mahasiswa/update/{{ $item->id }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            <div class="mb-3">
+                                                                <label for="" class="form-label">Username</label>
+                                                                <input type="text" value="{{ $item->username }}"
+                                                                    disabled class="form-control" />
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="is_verification" class="form-label">Status
+                                                                    Akun</label>
+                                                                <select name="is_verification"
+                                                                    id="is_verification{{ $item->id }}"
+                                                                    class="form-select">
+                                                                    <option value="0" data-tolak="false"
+                                                                        {{ $item->is_verification == '0' ? 'selected' : '' }}>
+                                                                        Belum Verifikasi</option>
+                                                                    <option value="1" data-tolak="false"
+                                                                        {{ $item->is_verification == '1' ? 'selected' : '' }}>
+                                                                        Verifikasi</option>
+                                                                    <option class="tolak" value="0" data-tolak="true"
+                                                                        {{ $item->is_verification == '0' && $item->tolak ? 'selected' : '' }}>
+                                                                        Tolak</option>
+                                                                </select>
+                                                            </div>
+                                                            <div id="tolakTextareaContainer{{ $item->id }}"
+                                                                style="display: none;" class="mb-3">
+                                                                <label for="tolak" class="form-label">Alasan
+                                                                    Penolakan</label>
+                                                                <textarea id="tolak{{ $item->id }}" required name="tolak" class="form-control" rows="3"></textarea>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                @php
+                                                                    $penguji = json_decode($item->penguji);
+                                                                @endphp
+                                                                <label for="penguji_1{{ $item->id }}"
+                                                                    class="form-label">Penguji 1</label>
+                                                                <select name="penguji_1" id="penguji_1{{ $item->id }}"
+                                                                    class="form-select"
+                                                                    onchange="updateMatkul1{{ $item->id }}()">
+                                                                    <option value="">Pilih Dosen</option>
+                                                                    @foreach ($dosen as $row)
+                                                                        <option value="{{ $row->id }}"
+                                                                            {{ $row->id == $penguji->penguji_1->user_id ? 'selected' : '' }}>
+                                                                            {{ $row->nama }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <select name="matkul_1" id="matkul_1{{ $item->id }}"
+                                                                    class="form-select mt-2">
+                                                                    <option value="">Pilih Matkul</option>
+                                                                </select>
+                                                                <input type="hidden"
+                                                                    id="value_matkul_1{{ $item->id }}"
+                                                                    value="{{ $penguji->penguji_1->matkul_id }}">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="penguji_2{{ $item->id }}"
+                                                                    class="form-label">Penguji 2</label>
+                                                                <select name="penguji_2" id="penguji_2{{ $item->id }}"
+                                                                    class="form-select"
+                                                                    onchange="updateMatkul2{{ $item->id }}()">
+                                                                    <option value="">Pilih Dosen</option>
+                                                                    @foreach ($dosen as $row)
+                                                                        <option value="{{ $row->id }}"
+                                                                            {{ $row->id == $penguji->penguji_2->user_id ? 'selected' : '' }}>
+                                                                            {{ $row->nama }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <select name="matkul_2" id="matkul_2{{ $item->id }}"
+                                                                    class="form-select mt-2">
+                                                                    <option value="">Pilih Matkul</option>
+                                                                </select>
+                                                                <input type="hidden"
+                                                                    id="value_matkul_2{{ $item->id }}"
+                                                                    value="{{ $penguji->penguji_2->matkul_id }}">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="penguji_3{{ $item->id }}"
+                                                                    class="form-label">Penguji 3</label>
+                                                                <select name="penguji_3"
+                                                                    id="penguji_3{{ $item->id }}" class="form-select"
+                                                                    onchange="updateMatkul3{{ $item->id }}()">
+                                                                    <option value="">Pilih Dosen</option>
+                                                                    @foreach ($dosen as $row)
+                                                                        <option value="{{ $row->id }}"
+                                                                            {{ $row->id == $penguji->penguji_3->user_id ? 'selected' : '' }}>
+                                                                            {{ $row->nama }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <select name="matkul_3" id="matkul_3{{ $item->id }}"
+                                                                    class="form-select mt-2">
+                                                                    <option value="">Pilih Matkul</option>
+                                                                </select>
+                                                                <input type="hidden"
+                                                                    id="value_matkul_3{{ $item->id }}"
+                                                                    value="{{ $penguji->penguji_3->matkul_id }}">
+                                                            </div>
+                                                            <div class="d-flex justify-content-end gap-2">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-primary">Verifikasi</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
                                 </tr>
 
                                 <script>

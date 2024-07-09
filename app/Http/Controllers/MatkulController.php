@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Matkul;
+use App\Models\Matakuliah;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -11,22 +12,19 @@ class MatkulController extends Controller
 {
     public function index()
     {
-        $matkul = Matkul::get();
-        $dosen = User::where('roles', 'dosen')->get();
+        $matkul = Matakuliah::get();
 
-        return view('Admin.Matkul.index', compact('matkul', 'dosen'));
+        return view('Admin.Matkul.index', compact('matkul'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'nama' => 'required',
-            'user_id' => 'required',
         ]);
 
-        $matkul = new Matkul([
+        $matkul = new Matakuliah([
             'nama' => $request->nama,
-            'user_id' => $request->user_id,
         ]);
         $matkul->save();
 
@@ -39,10 +37,9 @@ class MatkulController extends Controller
     {
         $request->validate([
             'nama' => 'required',
-            'user_id' => 'required',
         ]);
-        
-        $matkul = Matkul::findOrFail($id);
+
+        $matkul = Matakuliah::findOrFail($id);
 
         $data = $request->all();
         $matkul->update($data);
@@ -56,7 +53,7 @@ class MatkulController extends Controller
 
     public function destroy($id)
     {
-        $matkul = Matkul::find($id);
+        $matkul = Matakuliah::find($id);
 
         $matkul->delete();
         Alert::success('Success', 'Berhasil menghapus data');

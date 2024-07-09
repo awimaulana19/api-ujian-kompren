@@ -17,9 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('matakuliah_id');
             $table->date('finish_date')->nullable();
             $table->time('finish_time')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('matakuliah_id')->references('id')->on('matakuliahs')->onDelete('cascade');
             $table->timestamps();
         });
     }

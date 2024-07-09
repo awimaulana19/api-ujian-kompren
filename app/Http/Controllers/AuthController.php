@@ -61,6 +61,7 @@ class AuthController extends Controller
             'password' => 'required',
             'sk_kompren' => 'required|file|mimes:pdf',
             'foto' => 'nullable|file|mimes:jpg,jpeg,png',
+            // 'wa' => 'required|unique:users,wa',
         ]);
 
         if ($validator->fails()) {

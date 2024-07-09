@@ -39,6 +39,18 @@
                                             placeholder="Masukkan Username/Nip" />
                                     </div>
                                     <div class="mb-3">
+                                        <label for="matkul" class="form-label">Mata Kuliah</label>
+                                        <br>
+                                        @foreach ($matakuliah as $item)
+                                            <div class="form-check form-check-inline">
+                                                <input type="checkbox" class="form-check-input" name="matakuliah_id[]"
+                                                    id="matakuliah_{{ $item->id }}" value="{{ $item->id }}">
+                                                <label class="form-check-label"
+                                                    for="matakuliah_{{ $item->id }}">{{ $item->nama }}</label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <div class="mb-3">
                                         <label for="password" class="form-label">Password</label>
                                         <input type="password" id="password" name="password" class="form-control"
                                             placeholder="Masukkan Password" />
@@ -60,7 +72,7 @@
                                 <th class="text-center">No</th>
                                 <th class="text-center">Nama Dosen</th>
                                 <th class="text-center">Username/NIP</th>
-                                <th class="text-center">Status</th>
+                                <th class="text-center">Mata Kuliah</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -71,10 +83,7 @@
                                     <td class="text-center">{{ $item->nama }}</td>
                                     <td class="text-center"><span>{{ $item->username }}</span></td>
                                     <td class="text-center">
-                                        <span class="text-danger" {{ $item->is_verification == 0 ? '' : 'hidden' }}>Belum
-                                            Aktif</span>
-                                        <span class="text-success" {{ $item->is_verification == 1 ? '' : 'hidden' }}>Aktif
-                                        </span>
+                                        {{ implode(', ', $item->matkul->pluck('matakuliah.nama')->toArray()) }}
                                     </td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
@@ -113,17 +122,16 @@
                                                                 name="username" id="username" class="form-control" />
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label for="is_verification" class="form-label">Status
-                                                                Akun</label>
-                                                            <select name="is_verification" id="is_verification"
-                                                                class="form-select">
-                                                                <option value="1"
-                                                                    {{ $item->is_verification == '1' ? 'selected' : '' }}>
-                                                                    Aktifkan</option>
-                                                                <option value="0"
-                                                                    {{ $item->is_verification == '0' ? 'selected' : '' }}>
-                                                                    Nonaktifkan</option>
-                                                            </select>
+                                                            <label for="matkul" class="form-label">Mata Kuliah</label>
+                                                            <br>
+                                                            @foreach ($matakuliah as $mata)
+                                                                <div class="form-check form-check-inline">
+                                                                    <input type="checkbox" class="form-check-input" name="matakuliah_id[]"
+                                                                        id="matakuliah_{{ $mata->id }}" value="{{ $mata->id }}" {{ in_array($mata->id, $item->matkul->pluck('matakuliah.id')->toArray()) ? 'checked' : '' }}>
+                                                                    <label class="form-check-label"
+                                                                        for="matakuliah_{{ $mata->id }}">{{ $mata->nama }}</label>
+                                                                </div>
+                                                            @endforeach
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="password" class="form-label">Password</label>
@@ -134,8 +142,7 @@
                                                         <div class="d-flex justify-content-end gap-2">
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit"
-                                                                class="btn btn-primary">Update</button>
+                                                            <button type="submit" class="btn btn-primary">Update</button>
                                                         </div>
                                                     </form>
                                                 </div>

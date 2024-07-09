@@ -33,15 +33,6 @@
                                         <input type="text" id="nama" name="nama" class="form-control"
                                             placeholder="Masukkan Nama matkul" />
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="user_id" class="form-label">Dosen</label>
-                                        <select class="form-select" name="user_id" id="user_id">
-                                            <option value="">Pilih Dosen</option>
-                                            @foreach ($dosen as $item)
-                                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
                                     <div class="d-flex justify-content-end gap-2">
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Close</button>
@@ -58,7 +49,6 @@
                             <tr>
                                 <th class="text-center">No</th>
                                 <th class="text-center">Matkul Pengujian</th>
-                                <th class="text-center">Dosen</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -67,7 +57,6 @@
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td class="text-center">{{ $item->nama }}</td>
-                                    <td class="text-center">{{ $item->user->nama }}</td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#exampleModal{{ $item->id }}">
@@ -97,15 +86,6 @@
                                                             <label for="nama" class="form-label">Nama matkul</label>
                                                             <input type="text" id="nama" name="nama" class="form-control"
                                                                 value="{{ $item->nama }}" />
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="user_id" class="form-label">Dosen</label>
-                                                            <select class="form-select" name="user_id" id="user_id">
-                                                                <option value="">Pilih Dosen</option>
-                                                                @foreach ($dosen as $row)
-                                                                    <option value="{{ $row->id }}" {{ ($row->id == $item->user->id) ? 'selected' : ''}}>{{ $row->nama }}</option>
-                                                                @endforeach
-                                                            </select>
                                                         </div>
                                                         <div class="d-flex justify-content-end gap-2">
                                                             <button type="button" class="btn btn-secondary"

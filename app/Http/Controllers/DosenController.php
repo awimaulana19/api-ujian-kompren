@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Matakuliah;
 use App\Models\User;
 use App\Models\Matkul;
 use Illuminate\Http\Request;
@@ -15,11 +16,20 @@ class DosenController extends Controller
     public function index()
     {
         $user = User::where('roles', 'dosen')->get();
-        return view('Admin.Dosen.index', compact('user'));
+        $matakuliah = Matakuliah::get();
+        return view('Admin.Dosen.index', compact('user', 'matakuliah'));
     }
 
     public function store(Request $request)
     {
+        $already_username = User::where('username', $request->username)->first();
+
+        if ($already_username) {
+            Alert::error('Gagal', 'Usernname/Nip Sudah Ada');
+
+            return redirect('/admin/dosen');
+        }
+
         $hashedPassword = bcrypt($request->password);
 
         $user = new User([
@@ -31,6 +41,16 @@ class DosenController extends Controller
         ]);
         $user->save();
 
+        foreach ($request->matakuliah_id as $item) {
+            $matakuliah = Matakuliah::where('id', $item)->first();
+            $matkul = new Matkul();
+
+            $matkul->nama = $matakuliah->nama;
+            $matkul->matakuliah_id = $matakuliah->id;
+            $matkul->user_id = $user->id;
+            $matkul->save();
+        }
+
         Alert::success('Sukses', 'Berhasil menambah data');
 
         return redirect('/admin/dosen');
@@ -38,24 +58,39 @@ class DosenController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $validator = Validator::make($request->all(), [
+            'matakuliah_id' => 'required|array|min:1',
+            'matakuliah_id.*' => 'integer|exists:matakuliahs,id',
+        ]);
 
-        // Ambil data dari request
+        if ($validator->fails()) {
+            Alert::error('Gagal', 'Mata Kuliah Tidak Boleh Kosong');
+
+            return redirect('/admin/dosen');
+        }
+
+        $user = User::findOrFail($id);
         $data = $request->all();
 
-        // Periksa apakah ada permintaan untuk mengubah kata sandi
         if ($request->has('password')) {
-            // Hash kata sandi baru
             $data['password'] = bcrypt($request->password);
         }
 
-        // Lakukan pembaruan data
         $user->update($data);
 
-        // Tampilkan pesan sukses
-        Alert::success('Success', 'Berhasil mengupdate data');
+        $delete_matkul = Matkul::where('user_id', $id)->get();
+        Matkul::destroy($delete_matkul);
+        foreach ($request->matakuliah_id as $item) {
+            $matakuliah = Matakuliah::where('id', $item)->first();
+            $matkul = new Matkul();
 
-        // Redirect ke halaman yang diinginkan
+            $matkul->nama = $matakuliah->nama;
+            $matkul->matakuliah_id = $matakuliah->id;
+            $matkul->user_id = $user->id;
+            $matkul->save();
+        }
+
+        Alert::success('Success', 'Berhasil mengupdate data');
         return redirect('/admin/dosen');
     }
 
@@ -67,7 +102,7 @@ class DosenController extends Controller
         Alert::success('Success', 'Berhasil menghapus akun');
         return redirect('/admin/dosen');
     }
-    
+
     public function pdf_api(Request $request)
     {
         $validator = Validator::make($request->all(), [
