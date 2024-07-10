@@ -22,6 +22,27 @@ class DosenController extends Controller
 
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'matakuliah_id' => 'required|array|min:1',
+            'matakuliah_id.*' => 'integer|exists:matakuliahs,id',
+        ]);
+
+        if ($validator->fails()) {
+            Alert::error('Gagal', 'Mata Kuliah Tidak Boleh Kosong');
+
+            return redirect('/admin/dosen');
+        }
+
+        $validator2 = Validator::make($request->all(), [
+            'wa' => 'required|unique:users,wa'
+        ]);
+
+        if ($validator2->fails()) {
+            Alert::error('Gagal', 'Nomor WA tidak Boleh Sama');
+
+            return redirect('/admin/dosen');
+        }
+
         $already_username = User::where('username', $request->username)->first();
 
         if ($already_username) {
@@ -35,6 +56,7 @@ class DosenController extends Controller
         $user = new User([
             'nama' => $request->nama,
             'username' => $request->username,
+            'wa' => $request->wa,
             'password' => $hashedPassword,
             'roles' => $request->roles,
             'is_verification' => $request->is_verification,
@@ -69,6 +91,16 @@ class DosenController extends Controller
             return redirect('/admin/dosen');
         }
 
+        $validator2 = Validator::make($request->all(), [
+            'wa' => 'required|unique:users,wa,' . $id,
+        ]);
+
+        if ($validator2->fails()) {
+            Alert::error('Gagal', 'Nomor WA tidak Boleh Sama');
+
+            return redirect('/admin/dosen');
+        }
+
         $user = User::findOrFail($id);
         $data = $request->all();
 
@@ -78,16 +110,28 @@ class DosenController extends Controller
 
         $user->update($data);
 
-        $delete_matkul = Matkul::where('user_id', $id)->get();
-        Matkul::destroy($delete_matkul);
+        $matkuls_to_delete = Matkul::where('user_id', $id)
+            ->whereNotIn('matakuliah_id', $request->matakuliah_id)
+            ->get();
+
+        foreach ($matkuls_to_delete as $matkul) {
+            $matkul->delete();
+        }
+
         foreach ($request->matakuliah_id as $item) {
             $matakuliah = Matakuliah::where('id', $item)->first();
-            $matkul = new Matkul();
+            $matkul = Matkul::where('user_id', $id)->where('matakuliah_id', $item)->first();
 
-            $matkul->nama = $matakuliah->nama;
-            $matkul->matakuliah_id = $matakuliah->id;
-            $matkul->user_id = $user->id;
-            $matkul->save();
+            if (!$matkul) {
+                $buat_matkul = new Matkul();
+                $buat_matkul->nama = $matakuliah->nama;
+                $buat_matkul->matakuliah_id = $matakuliah->id;
+                $buat_matkul->user_id = $user->id;
+                $buat_matkul->save();
+            } else {
+                $matkul->nama = $matakuliah->nama;
+                $matkul->update();
+            }
         }
 
         Alert::success('Success', 'Berhasil mengupdate data');

@@ -57,10 +57,11 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama' => 'required',
-            'username' => 'required',
-            'password' => 'required',
+            'username' => 'required|size:11',
+            'password' => 'required|min:8',
             'sk_kompren' => 'required|file|mimes:pdf',
             'foto' => 'nullable|file|mimes:jpg,jpeg,png',
+            'wa' => 'required|unique:users,wa'
         ]);
 
         if ($validator->fails()) {
@@ -95,6 +96,7 @@ class AuthController extends Controller
 
             if ($user) {
                 $user->nama = $request->nama;
+                $user->wa = $request->wa;
                 $user->password = $hashedPassword;
                 $user->penguji = $penguji;
                 $user->nilai = $nilai;
@@ -127,6 +129,7 @@ class AuthController extends Controller
 
                 $regis = new User();
                 $regis->nama = $request->nama;
+                $regis->wa = $request->wa;
                 $regis->username = $request->username;
                 $regis->password = $hashedPassword;
                 $regis->roles = 'mahasiswa';

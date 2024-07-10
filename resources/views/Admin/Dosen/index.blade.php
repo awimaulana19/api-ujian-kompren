@@ -30,19 +30,24 @@
                                     <input type="hidden" name="is_verification" value="1" />
                                     <div class="mb-3">
                                         <label for="nama" class="form-label">Nama Dosen</label>
-                                        <input type="text" id="nama" name="nama" class="form-control"
+                                        <input required type="text" id="nama" name="nama" class="form-control"
                                             placeholder="Masukkan Nama Dosen" />
                                     </div>
                                     <div class="mb-3">
                                         <label for="username" class="form-label">Username/Nip</label>
-                                        <input type="text" id="username" name="username" class="form-control"
+                                        <input required type="text" id="username" name="username" class="form-control"
                                             placeholder="Masukkan Username/Nip" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="wa" class="form-label">No Whatsapp</label>
+                                        <input required type="text" id="wa" name="wa" class="form-control"
+                                            placeholder="Masukkan No Whatsapp" />
                                     </div>
                                     <div class="mb-3">
                                         <label for="matkul" class="form-label">Mata Kuliah</label>
                                         <br>
                                         @foreach ($matakuliah as $item)
-                                            <div class="form-check form-check-inline">
+                                            <div class="form-check">
                                                 <input type="checkbox" class="form-check-input" name="matakuliah_id[]"
                                                     id="matakuliah_{{ $item->id }}" value="{{ $item->id }}">
                                                 <label class="form-check-label"
@@ -52,7 +57,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="password" class="form-label">Password</label>
-                                        <input type="password" id="password" name="password" class="form-control"
+                                        <input required type="password" id="password" name="password" class="form-control"
                                             placeholder="Masukkan Password" />
                                     </div>
                                     <div class="d-flex justify-content-end gap-2">
@@ -113,19 +118,24 @@
                                                         @csrf
                                                         <div class="mb-3">
                                                             <label for="nama" class="form-label">Nama Dosen</label>
-                                                            <input type="text" value="{{ $item->nama }}"
+                                                            <input required type="text" value="{{ $item->nama }}"
                                                                 name="nama" id="nama" class="form-control" />
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="username" class="form-label">Username</label>
-                                                            <input type="text" value="{{ $item->username }}"
+                                                            <input required type="text" value="{{ $item->username }}"
                                                                 name="username" id="username" class="form-control" />
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="wa" class="form-label">No Whatsapp</label>
+                                                            <input required type="text" value="{{ $item->wa }}"
+                                                                name="wa" id="wa" class="form-control" />
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="matkul" class="form-label">Mata Kuliah</label>
                                                             <br>
                                                             @foreach ($matakuliah as $mata)
-                                                                <div class="form-check form-check-inline">
+                                                                <div class="form-check">
                                                                     <input type="checkbox" class="form-check-input" name="matakuliah_id[]"
                                                                         id="matakuliah_{{ $mata->id }}" value="{{ $mata->id }}" {{ in_array($mata->id, $item->matkul->pluck('matakuliah.id')->toArray()) ? 'checked' : '' }}>
                                                                     <label class="form-check-label"
