@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Hasil;
 use App\Models\Matkul;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
@@ -89,6 +90,30 @@ class MahasiswaController extends Controller
             $user->penguji = $updatedJson;
 
             $user->update();
+
+            $penguji_ids = [$request->penguji_1, $request->penguji_2, $request->penguji_3];
+            $client = new Client();
+            $url = "http://8.215.36.120:3000/message";
+
+            foreach ($penguji_ids as $penguji_id) {
+                $penguji = User::where('id', $penguji_id)->first();
+
+                if ($penguji) {
+                    $wa = $penguji->wa;
+                    $message = "Ada Mahasiswa Atas Nama " . $user->nama . " Yang Akan Baru Di Uji, Mohon Atur Jadwal Bimbingannya";
+
+                    $body = [
+                        'phoneNumber' => $wa,
+                        'message' => $message,
+                    ];
+
+                    $client->request('POST', $url, [
+                        'form_params' => $body,
+                        'verify'  => false,
+                    ]);
+                }
+            }
+
             Alert::success('Success', 'Verifikasi akun berhasil');
         }
 
@@ -213,6 +238,24 @@ class MahasiswaController extends Controller
 
         $user->penguji = $updatedJson;
         $user->update();
+
+        $matkul = Matkul::where('id', $request->matkul_id)->first();
+
+        $client = new Client();
+        $url = "http://8.215.36.120:3000/message";
+
+        $wa = $user->wa;
+        $message = "Jadwal Ujian Kompren " . $matkul->matakuliah->nama . " Anda Telah Diatur Pada Tanggal " . $request->tanggal_ujian . " Di Jam " . $request->jam_ujian;
+
+        $body = [
+            'phoneNumber' => $wa,
+            'message' => $message,
+        ];
+
+        $client->request('POST', $url, [
+            'form_params' => $body,
+            'verify'  => false,
+        ]);
 
         return response()->json([
             'success' => true,
@@ -416,6 +459,22 @@ class MahasiswaController extends Controller
         $user->update();
 
         $user->makeHidden(['penguji', 'sk_kompren',  'is_verification', 'created_at', 'updated_at']);
+
+        $client = new Client();
+        $url = "http://8.215.36.120:3000/message";
+
+        $wa = $user->wa;
+        $message = "Anda Remidial Di Matkul " . $matkul->matakuliah->nama . ", Silahkan Tunggu Jadwal Remidial Anda";
+
+        $body = [
+            'phoneNumber' => $wa,
+            'message' => $message,
+        ];
+
+        $client->request('POST', $url, [
+            'form_params' => $body,
+            'verify'  => false,
+        ]);
 
         return response()->json([
             'success' => true,

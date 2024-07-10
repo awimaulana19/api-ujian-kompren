@@ -7,6 +7,7 @@ use App\Models\Soal;
 use App\Models\User;
 use App\Models\Hasil;
 use App\Models\Matkul;
+use GuzzleHttp\Client;
 use App\Models\Jawaban;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -681,6 +682,24 @@ class SoalController extends Controller
             $user->update();
 
             $user->makeHidden(['penguji', 'sk_kompren',  'is_verification', 'created_at', 'updated_at']);
+
+            $penguji_matkul = User::where('id', $matkul->user_id)->first();
+
+            $client = new Client();
+            $url = "http://8.215.36.120:3000/message";
+
+            $wa = $penguji_matkul->wa;
+            $message = "Mahasiswa Atas Nama " . $user->nama . " Telah Submit Jawabannya, Mohon Untuk Di Cek Nilainya";
+
+            $body = [
+                'phoneNumber' => $wa,
+                'message' => $message,
+            ];
+
+            $client->request('POST', $url, [
+                'form_params' => $body,
+                'verify'  => false,
+            ]);
 
             return response()->json([
                 'success' => true,

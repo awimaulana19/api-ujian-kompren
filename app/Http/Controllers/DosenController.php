@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Matakuliah;
 use App\Models\User;
 use App\Models\Matkul;
+use GuzzleHttp\Client;
+use App\Models\Matakuliah;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
@@ -219,6 +220,22 @@ class DosenController extends Controller
         } else {
             $nilai_huruf = "Nilai tidak valid";
         }
+
+        $client = new Client();
+        $url = "http://8.215.36.120:3000/message";
+
+        $wa = $user->wa;
+        $message = "SK Nilai Mata Kuliah" . $matkul->matakuliah->nama . " Anda Sudah Tersedia, Nilai Anda Adalah ". $request->nilai_angka;
+
+        $body = [
+            'phoneNumber' => $wa,
+            'message' => $message,
+        ];
+
+        $client->request('POST', $url, [
+            'form_params' => $body,
+            'verify'  => false,
+        ]);
 
         $pdf = PDF::loadView('Mahasiswa.SkPenilaian.skPDF', compact('request', 'tanggal_sk', 'keterangan', 'nilai_huruf'))->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'sans-serif']);
         $pdf->render();
