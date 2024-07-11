@@ -225,7 +225,7 @@ class DosenController extends Controller
         $url = "http://8.215.36.120:3000/message";
 
         $wa = $user->wa;
-        $message = "SK Nilai Mata Kuliah" . $matkul->matakuliah->nama . " Anda Sudah Tersedia, Nilai Anda Adalah ". $request->nilai_angka;
+        $message = "SK Nilai Mata Kuliah " . $matkul->matakuliah->nama . " Anda Sudah Tersedia, Nilai Anda Adalah ". $request->nilai_angka;
 
         $body = [
             'phoneNumber' => $wa,
