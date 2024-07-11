@@ -91,6 +91,22 @@ class MahasiswaController extends Controller
 
             $user->update();
 
+            $client_mhs = new Client();
+            $url_mhs = "http://8.215.36.120:3000/message";
+
+            $wa_mhs = $user->wa;
+            $message_mhs = "Akun Ujian Kompren Anda Telah Diverifikasi";
+
+            $body_mhs = [
+                'phoneNumber' => $wa_mhs,
+                'message' => $message_mhs,
+            ];
+
+            $client_mhs->request('POST', $url_mhs, [
+                'form_params' => $body_mhs,
+                'verify'  => false,
+            ]);
+
             $penguji_ids = [$request->penguji_1, $request->penguji_2, $request->penguji_3];
             $client = new Client();
             $url = "http://8.215.36.120:3000/message";
