@@ -268,7 +268,7 @@
                             option.selected = true;
                         }
                         option.value = matkul.id;
-                        option.text = matkul.nama;
+                        option.text = matkul.matakuliah.nama;
                         document.getElementById('matkul_1{{ $item->id }}').appendChild(option);
                     });
 
@@ -301,7 +301,7 @@
                             option.selected = true;
                         }
                         option.value = matkul.id;
-                        option.text = matkul.nama;
+                        option.text = matkul.matakuliah.nama;
                         document.getElementById('matkul_2{{ $item->id }}').appendChild(option);
                     });
 
@@ -334,7 +334,7 @@
                             option.selected = true;
                         }
                         option.value = matkul.id;
-                        option.text = matkul.nama;
+                        option.text = matkul.matakuliah.nama;
                         document.getElementById('matkul_3{{ $item->id }}').appendChild(option);
                     });
 

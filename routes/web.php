@@ -39,7 +39,7 @@ Route::group(['middleware' => ['auth', 'OnlyAdmin']], function () {
     Route::get('/admin/mahasiswa/delete/{id}', [MahasiswaController::class, 'destroy']);
 
     Route::get('/matkul-list', function (Request $request) {
-        $matkul = Matkul::where('user_id', $request->penguji)->get();
+        $matkul = Matkul::where('user_id', $request->penguji)->with('matakuliah')->get();
 
         return response()->json($matkul);
     });
