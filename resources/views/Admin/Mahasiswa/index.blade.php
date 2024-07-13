@@ -98,6 +98,14 @@
                                                                     disabled class="form-control" />
                                                             </div>
                                                             <div class="mb-3">
+                                                                <label for="" class="form-label">No Whatsapp</label>
+                                                                <input type="text" value="{{ $item->wa }}"
+                                                                    class="form-control" pattern="\d{12,}" />
+                                                                <div class="invalid-feedback">
+                                                                    Input Minimal 12 Angka.
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3">
                                                                 <label for="is_verification" class="form-label">Status
                                                                     Akun</label>
                                                                 <select name="is_verification"
@@ -148,8 +156,8 @@
                                                             <div class="mb-3">
                                                                 <label for="penguji_2{{ $item->id }}"
                                                                     class="form-label">Penguji 2</label>
-                                                                <select name="penguji_2" id="penguji_2{{ $item->id }}"
-                                                                    class="form-select"
+                                                                <select name="penguji_2"
+                                                                    id="penguji_2{{ $item->id }}" class="form-select"
                                                                     onchange="updateMatkul2{{ $item->id }}()">
                                                                     <option value="">Pilih Dosen</option>
                                                                     @foreach ($dosen as $row)

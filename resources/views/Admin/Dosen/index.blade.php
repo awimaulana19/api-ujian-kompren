@@ -129,15 +129,22 @@
                                                         <div class="mb-3">
                                                             <label for="wa" class="form-label">No Whatsapp</label>
                                                             <input required type="text" value="{{ $item->wa }}"
-                                                                name="wa" id="wa" class="form-control" />
+                                                                name="wa" id="wa" class="form-control"
+                                                                pattern="\d{12,}" />
+                                                            <div class="invalid-feedback">
+                                                                Input Minimal 12 Angka.
+                                                            </div>
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="matkul" class="form-label">Mata Kuliah</label>
                                                             <br>
                                                             @foreach ($matakuliah as $mata)
                                                                 <div class="form-check">
-                                                                    <input type="checkbox" class="form-check-input" name="matakuliah_id[]"
-                                                                        id="matakuliah_{{ $mata->id }}" value="{{ $mata->id }}" {{ in_array($mata->id, $item->matkul->pluck('matakuliah.id')->toArray()) ? 'checked' : '' }}>
+                                                                    <input type="checkbox" class="form-check-input"
+                                                                        name="matakuliah_id[]"
+                                                                        id="matakuliah_{{ $mata->id }}"
+                                                                        value="{{ $mata->id }}"
+                                                                        {{ in_array($mata->id, $item->matkul->pluck('matakuliah.id')->toArray()) ? 'checked' : '' }}>
                                                                     <label class="form-check-label"
                                                                         for="matakuliah_{{ $mata->id }}">{{ $mata->nama }}</label>
                                                                 </div>

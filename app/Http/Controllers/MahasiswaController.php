@@ -88,6 +88,7 @@ class MahasiswaController extends Controller
             $updatedJson = json_encode($originalData);
 
             $user->penguji = $updatedJson;
+            $user->wa = $request->wa;
 
             $user->update();
 
