@@ -69,6 +69,7 @@ class MahasiswaController extends Controller
                 'matkul_1' => 'required',
                 'matkul_2' => 'required',
                 'matkul_3' => 'required',
+                'wa' => 'required',
             ]);
 
             $user = User::where('id', $id)->first();
