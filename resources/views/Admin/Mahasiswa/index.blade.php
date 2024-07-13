@@ -100,7 +100,7 @@
                                                             <div class="mb-3">
                                                                 <label for="" class="form-label">No Whatsapp</label>
                                                                 <input type="text" value="{{ $item->wa }}"
-                                                                    class="form-control" pattern="\d{12,}" />
+                                                                    class="form-control" name="wa" pattern="\d{12,}" />
                                                                 <div class="invalid-feedback">
                                                                     Input Minimal 12 Angka.
                                                                 </div>
