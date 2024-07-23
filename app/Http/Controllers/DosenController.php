@@ -8,6 +8,7 @@ use GuzzleHttp\Client;
 use App\Models\Matakuliah;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
@@ -168,6 +169,12 @@ class DosenController extends Controller
             ], 404);
         }
 
+        $signature = $request->input('signature');
+        $signature = str_replace('data:image/png;base64,', '', $signature);
+        $signature = str_replace(' ', '+', $signature);
+        $imageName = auth()->user()->username . '.png';
+        File::put(public_path('signatures') . '/' . $imageName, base64_decode($signature));
+
         $user = User::where('username', $request->nim_mahasiswa)->first();
         $matkul = Matkul::where('id', $request->mata_kuliah_id)->first();
         $originalData = json_decode($user->nilai, true);
@@ -221,11 +228,27 @@ class DosenController extends Controller
             $nilai_huruf = "Nilai tidak valid";
         }
 
+        $signaturePath = public_path('/signatures/' . auth()->user()->username . '.png');
+        $signatureBase64 = null;
+
+        if (File::exists($signaturePath)) {
+            $fileContents = File::get($signaturePath);
+            $signatureBase64 = base64_encode($fileContents);
+            $decoded = base64_decode($signatureBase64, true);
+            if ($decoded !== false && $decoded !== null && strlen($decoded) > 0) {
+                $signaturePath = '/signatures/' . auth()->user()->username . '.png';
+            } else {
+                $signaturePath = null;
+            }
+        } else {
+            $signaturePath = null;
+        }
+
         $client = new Client();
         $url = "http://8.215.36.120:3000/message";
 
         $wa = $user->wa;
-        $message = "SK Nilai Mata Kuliah " . $matkul->matakuliah->nama . " Anda Sudah Tersedia, Nilai Anda Adalah ". $request->nilai_angka;
+        $message = "SK Nilai Mata Kuliah " . $matkul->matakuliah->nama . " Anda Sudah Tersedia, Nilai Anda Adalah " . $request->nilai_angka;
 
         $body = [
             'phoneNumber' => $wa,
@@ -237,7 +260,7 @@ class DosenController extends Controller
             'verify'  => false,
         ]);
 
-        $pdf = PDF::loadView('Mahasiswa.SkPenilaian.skPDF', compact('request', 'tanggal_sk', 'keterangan', 'nilai_huruf'))->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadView('Mahasiswa.SkPenilaian.skPDF', compact('request', 'tanggal_sk', 'keterangan', 'nilai_huruf', 'signaturePath'))->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'sans-serif']);
         $pdf->render();
 
         return $pdf->stream("Surat Penilaian {$user->nama}.pdf");

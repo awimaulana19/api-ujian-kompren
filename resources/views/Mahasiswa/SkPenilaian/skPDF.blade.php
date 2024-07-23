@@ -163,10 +163,16 @@
         <div class="col_ttd4">
             <p>Romangpolong, {{ $tanggal_sk }}</p>
             <p>Penguji,</p>
-            <p style="padding-top: 80px;">{{ $request->dosen_penguji }}</p>
+            @if ($signaturePath)
+                <img id="signature-img" height="100px"
+                    src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path($signaturePath))) }}"
+                    class="signature">
+                <p>{{ $request->dosen_penguji }}</p>
+            @else
+                <p style="padding-top: 80px;">{{ $request->dosen_penguji }}</p>
+            @endif
         </div>
     </div>
-
 </body>
 
 </html>

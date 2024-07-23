@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
@@ -505,6 +506,7 @@ class MahasiswaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'dosen_penguji' => 'required',
+            'username_dosen_penguji' => 'required',
             'mata_kuliah_id' => 'required|exists:matkuls,id',
             'mata_kuliah' => 'required',
             'nama_mahasiswa' => 'required',
@@ -553,7 +555,23 @@ class MahasiswaController extends Controller
             $nilai_huruf = "Nilai tidak valid";
         }
 
-        $pdf = PDF::loadView('Mahasiswa.SkPenilaian.skPDF', compact('request', 'tanggal_sk', 'keterangan', 'nilai_huruf'))->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'sans-serif']);
+        $signaturePath = public_path('/signatures/' . $request->username_dosen_penguji . '.png');
+        $signatureBase64 = null;
+
+        if (File::exists($signaturePath)) {
+            $fileContents = File::get($signaturePath);
+            $signatureBase64 = base64_encode($fileContents);
+            $decoded = base64_decode($signatureBase64, true);
+            if ($decoded !== false && $decoded !== null && strlen($decoded) > 0) {
+                $signaturePath = '/signatures/' . $request->username_dosen_penguji . '.png';
+            } else {
+                $signaturePath = null;
+            }
+        } else {
+            $signaturePath = null;
+        }
+
+        $pdf = PDF::loadView('Mahasiswa.SkPenilaian.skPDF', compact('request', 'tanggal_sk', 'keterangan', 'nilai_huruf', 'signaturePath'))->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'sans-serif']);
         return $pdf->download("Surat Penilaian.pdf");
     }
 

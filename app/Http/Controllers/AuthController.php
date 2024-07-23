@@ -53,6 +53,21 @@ class AuthController extends Controller
         return redirect('/');
     }
 
+    public function regis_api()
+    {
+        $dosen = User::where('roles', 'dosen')->get();
+
+        foreach ($dosen as &$item) {
+            unset($item['created_at'], $item['updated_at'], $item['tolak'], $item['is_verification'], $item['nilai'], $item['penguji'], $item['foto'], $item['sk_kompren'], $item['roles'], $item['username']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Get Data Berhasil',
+            'data' => $dosen
+        ]);
+    }
+
     public function register_api(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -61,7 +76,13 @@ class AuthController extends Controller
             'password' => 'required|min:8',
             'sk_kompren' => 'required|file|mimes:pdf',
             'foto' => 'nullable|file|mimes:jpg,jpeg,png',
-            'wa' => 'required|unique:users,wa'
+            'wa' => 'required|unique:users,wa',
+            'penguji_1' => 'required',
+            'penguji_2' => 'required',
+            'penguji_3' => 'required',
+            'matkul_1' => 'required',
+            'matkul_2' => 'required',
+            'matkul_3' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -81,9 +102,9 @@ class AuthController extends Controller
             $hashedPassword = bcrypt($request->password);
 
             $penguji = json_encode([
-                'penguji_1' => ['user_id' => 0, 'matkul_id' => 0, 'dapat_ujian' => false],
-                'penguji_2' => ['user_id' => 0, 'matkul_id' => 0, 'dapat_ujian' => false],
-                'penguji_3' => ['user_id' => 0, 'matkul_id' => 0, 'dapat_ujian' => false],
+                'penguji_1' => ['user_id' => $request->penguji_1, 'matkul_id' => $request->matkul_1, 'dapat_ujian' => false],
+                'penguji_2' => ['user_id' => $request->penguji_2, 'matkul_id' => $request->matkul_2, 'dapat_ujian' => false],
+                'penguji_3' => ['user_id' => $request->penguji_3, 'matkul_id' => $request->matkul_3, 'dapat_ujian' => false],
             ]);
 
             $nilai = json_encode([

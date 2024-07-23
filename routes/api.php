@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Matkul;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -29,6 +30,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         $request->user()->foto = url('/') . '/assets/img/profile.png';
     }
     return $request->user();
+});
+
+Route::get('/register', [AuthController::class, 'regis_api']);
+
+Route::get('/matkul-list', function (Request $request) {
+    $matkul = Matkul::where('user_id', $request->penguji)->get();
+
+    return response()->json($matkul);
 });
 
 Route::post('/register', [AuthController::class, 'register_api']);
