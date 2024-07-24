@@ -255,6 +255,12 @@ class AuthController extends Controller
 
         $dosen = Auth::user();
         $mahasiswa = [];
+        $sudah_ada_jadwal_ujian = 0;
+        $belum_ada_jadwal_ujian = 0;
+        $belum_ujian = 0;
+        $jumlah_remidial = 0;
+        $selesai_ujian = 0;
+        $telah_kirim_sk = 0;
 
         $user = User::where('roles', 'mahasiswa')->get();
 
@@ -266,6 +272,62 @@ class AuthController extends Controller
                     $data_user = User::where('id', $item->id)->first();
 
                     $mahasiswa[] = $data_user;
+                    $data_penguji = json_decode($item->penguji);
+                    $data_nilai = json_decode($item->nilai);
+
+                    foreach ($dosen->matkul as $mat) {
+                        if ($data_penguji->penguji_1->user_id == $dosen->id && $data_penguji->penguji_1->matkul_id == $mat->id) {
+                            if ($data_nilai->nilai_penguji_1->sk) {
+                                $telah_kirim_sk = $telah_kirim_sk + 1;
+                            } else if ($data_nilai->nilai_penguji_1->remidial) {
+                                $jumlah_remidial = $jumlah_remidial + 1;
+                            } else if ($data_nilai->nilai_penguji_1->nilai_ujian !== null) {
+                                $selesai_ujian = $selesai_ujian + 1;
+                            } else {
+                                $tanggal_ujian = $data_penguji->penguji_1->tanggal_ujian ?? '';
+                                if ($tanggal_ujian) {
+                                    $sudah_ada_jadwal_ujian = $sudah_ada_jadwal_ujian + 1;
+                                }else{
+                                    $belum_ada_jadwal_ujian = $belum_ada_jadwal_ujian + 1;
+                                }
+                                $belum_ujian = $belum_ujian + 1;
+                            }
+                        }
+                        if ($data_penguji->penguji_2->user_id == $dosen->id && $data_penguji->penguji_2->matkul_id == $mat->id) {
+                            if ($data_nilai->nilai_penguji_2->sk) {
+                                $telah_kirim_sk = $telah_kirim_sk + 1;
+                            } else if ($data_nilai->nilai_penguji_2->remidial) {
+                                $jumlah_remidial = $jumlah_remidial + 1;
+                            } else if ($data_nilai->nilai_penguji_2->nilai_ujian !== null) {
+                                $selesai_ujian = $selesai_ujian + 1;
+                            } else {
+                                $tanggal_ujian = $data_penguji->penguji_2->tanggal_ujian ?? '';
+                                if ($tanggal_ujian) {
+                                    $sudah_ada_jadwal_ujian = $sudah_ada_jadwal_ujian + 1;
+                                }else{
+                                    $belum_ada_jadwal_ujian = $belum_ada_jadwal_ujian + 1;
+                                }
+                                $belum_ujian = $belum_ujian + 1;
+                            }
+                        }
+                        if ($data_penguji->penguji_3->user_id == $dosen->id && $data_penguji->penguji_3->matkul_id == $mat->id) {
+                            if ($data_nilai->nilai_penguji_3->sk) {
+                                $telah_kirim_sk = $telah_kirim_sk + 1;
+                            } else if ($data_nilai->nilai_penguji_3->remidial) {
+                                $jumlah_remidial = $jumlah_remidial + 1;
+                            } else if ($data_nilai->nilai_penguji_3->nilai_ujian !== null) {
+                                $selesai_ujian = $selesai_ujian + 1;
+                            } else {
+                                $tanggal_ujian = $data_penguji->penguji_3->tanggal_ujian ?? '';
+                                if ($tanggal_ujian) {
+                                    $sudah_ada_jadwal_ujian = $sudah_ada_jadwal_ujian + 1;
+                                }else{
+                                    $belum_ada_jadwal_ujian = $belum_ada_jadwal_ujian + 1;
+                                }
+                                $belum_ujian = $belum_ujian + 1;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -280,6 +342,12 @@ class AuthController extends Controller
         $data['dosen'] = $data_dosen;
         $data['jumlah_matkul'] = $jumlah_matkul;
         $data['jumlah_mahasiswa'] = $jumlah_mahasiswa;
+        $data['sudah_ada_jadwal_ujian'] = $sudah_ada_jadwal_ujian;
+        $data['belum_ada_jadwal_ujian'] = $belum_ada_jadwal_ujian;
+        $data['belum_ujian'] = $belum_ujian;
+        $data['jumlah_remidial'] = $jumlah_remidial;
+        $data['selesai_ujian'] = $selesai_ujian;
+        $data['telah_kirim_sk'] = $telah_kirim_sk;
 
         return response()->json([
             'success' => true,

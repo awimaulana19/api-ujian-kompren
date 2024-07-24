@@ -27,7 +27,7 @@
              <li class="menu-header small text-uppercase">
                  <span class="menu-header-text">Pengguna</span>
              </li>
-             <li id="dosen" class="menu-item">
+             <li id="dosen" class="menu-item {{ request()->is('admin/dosen*') ? 'active' : '' }}">
                  <a href="/admin/dosen" class="menu-link">
                      <i class="menu-icon tf-icons bx bxs-user-badge"></i>
                      <div data-i18n="Analytics">Data Dosen</div>

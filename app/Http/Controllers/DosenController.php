@@ -149,6 +149,36 @@ class DosenController extends Controller
         return redirect('/admin/dosen');
     }
 
+    public function lihat_mahasiswa_diuji($dosen, $id)
+    {
+        $dosen = User::where('id', $dosen)->first();
+        $mahasiswa = [];
+        $matkul_pengujian = Matkul::where('id', $id)->first();
+
+        $user = User::where('roles', 'mahasiswa')->get();
+
+        foreach ($user as $item) {
+            $penguji = json_decode($item->penguji, true);
+
+            foreach ($penguji as $key => $value) {
+                if ($dosen->id == $value['user_id'] && $matkul_pengujian->id == $value['matkul_id']) {
+                    $data_user = User::where('id', $item->id)->first();
+
+                    $mahasiswa[] = $data_user;
+                }
+            }
+        }
+
+        return view('Admin.Dosen.mahasiswa', compact('mahasiswa', 'matkul_pengujian'));
+    }
+
+    public function lihat_bank_soal($id)
+    {
+        $matkul = Matkul::where('id', $id)->first();
+
+        return view('Admin.Dosen.soal', compact('matkul'));
+    }
+
     public function pdf_api(Request $request)
     {
         $validator = Validator::make($request->all(), [

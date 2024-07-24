@@ -30,35 +30,30 @@
                                     <input type="hidden" name="is_verification" value="1" />
                                     <div class="mb-3">
                                         <label for="nama" class="form-label">Nama Dosen</label>
-                                        <input required type="text" id="nama" name="nama" class="form-control"
+                                        <input type="text" id="nama" name="nama" class="form-control"
                                             placeholder="Masukkan Nama Dosen" />
                                     </div>
                                     <div class="mb-3">
                                         <label for="username" class="form-label">Username/Nip</label>
-                                        <input required type="text" id="username" name="username" class="form-control"
+                                        <input type="text" id="username" name="username" class="form-control"
                                             placeholder="Masukkan Username/Nip" />
                                     </div>
                                     <div class="mb-3">
-                                        <label for="wa" class="form-label">No Whatsapp</label>
-                                        <input required type="text" id="wa" name="wa" class="form-control"
-                                            placeholder="Masukkan No Whatsapp" />
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" id="password" name="password" class="form-control"
+                                            placeholder="Masukkan Password" />
                                     </div>
                                     <div class="mb-3">
                                         <label for="matkul" class="form-label">Mata Kuliah</label>
                                         <br>
                                         @foreach ($matakuliah as $item)
-                                            <div class="form-check">
+                                            <div class="form-check form-check-inline">
                                                 <input type="checkbox" class="form-check-input" name="matakuliah_id[]"
                                                     id="matakuliah_{{ $item->id }}" value="{{ $item->id }}">
                                                 <label class="form-check-label"
                                                     for="matakuliah_{{ $item->id }}">{{ $item->nama }}</label>
                                             </div>
                                         @endforeach
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="password" class="form-label">Password</label>
-                                        <input required type="password" id="password" name="password" class="form-control"
-                                            placeholder="Masukkan Password" />
                                     </div>
                                     <div class="d-flex justify-content-end gap-2">
                                         <button type="button" class="btn btn-secondary"
@@ -88,8 +83,30 @@
                                     <td class="text-center">{{ $item->nama }}</td>
                                     <td class="text-center"><span>{{ $item->username }}</span></td>
                                     <td class="text-center">
-                                        {{ implode(', ', $item->matkul->pluck('matakuliah.nama')->toArray()) }}
+                                        @php
+                                            $matkul_list = $item->matkul->pluck('id')->toArray();
+                                        @endphp
+                                        @foreach ($matkul_list as $matkul)
+                                            @php
+                                                $matkulItem = $item->matkul->where('id', $matkul)->first();
+                                            @endphp
+                                            <div class="btn-group dropend">
+                                                <a class="dropdown-toggle me-2" href="#" role="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    {{ $matkulItem->matakuliah->nama }}
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item"
+                                                            href="/admin/dosen/mahasiswa-diuji/{{ $item->id }}/{{ $matkulItem->id }}">Mahasiswa</a>
+                                                    </li>
+                                                    <li><a class="dropdown-item"
+                                                            href="/admin/dosen/bank-soal/{{ $matkulItem->id }}">Bank
+                                                            Soal</a></li>
+                                                </ul>
+                                            </div>
+                                        @endforeach
                                     </td>
+
                                     <td class="text-center">
                                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#exampleModal{{ $item->id }}">
@@ -118,22 +135,19 @@
                                                         @csrf
                                                         <div class="mb-3">
                                                             <label for="nama" class="form-label">Nama Dosen</label>
-                                                            <input required type="text" value="{{ $item->nama }}"
+                                                            <input type="text" value="{{ $item->nama }}"
                                                                 name="nama" id="nama" class="form-control" />
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="username" class="form-label">Username</label>
-                                                            <input required type="text" value="{{ $item->username }}"
+                                                            <input type="text" value="{{ $item->username }}"
                                                                 name="username" id="username" class="form-control" />
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label for="wa" class="form-label">No Whatsapp</label>
-                                                            <input required type="text" value="{{ $item->wa }}"
-                                                                name="wa" id="wa" class="form-control"
-                                                                pattern="\d{12,}" />
-                                                            <div class="invalid-feedback">
-                                                                Input Minimal 12 Angka.
-                                                            </div>
+                                                            <label for="password" class="form-label">Password</label>
+                                                            <input type="password" id="password" name="password"
+                                                                class="form-control"
+                                                                placeholder="Masukkan Password Baru" />
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="matkul" class="form-label">Mata Kuliah</label>
@@ -149,12 +163,6 @@
                                                                         for="matakuliah_{{ $mata->id }}">{{ $mata->nama }}</label>
                                                                 </div>
                                                             @endforeach
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="password" class="form-label">Password</label>
-                                                            <input type="password" id="password" name="password"
-                                                                class="form-control"
-                                                                placeholder="Masukkan Password Baru" />
                                                         </div>
                                                         <div class="d-flex justify-content-end gap-2">
                                                             <button type="button" class="btn btn-secondary"
