@@ -144,6 +144,11 @@
                                                                 name="username" id="username" class="form-control" />
                                                         </div>
                                                         <div class="mb-3">
+                                                            <label for="wa" class="form-label">No Whatsapp</label>
+                                                            <input required type="text" id="wa" name="wa" class="form-control"
+                                                                placeholder="Masukkan No Whatsapp" />
+                                                        </div>
+                                                        <div class="mb-3">
                                                             <label for="password" class="form-label">Password</label>
                                                             <input type="password" id="password" name="password"
                                                                 class="form-control"
