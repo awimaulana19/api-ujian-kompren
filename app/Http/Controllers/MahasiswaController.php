@@ -652,7 +652,23 @@ class MahasiswaController extends Controller
             $nilai_huruf = "Nilai tidak valid";
         }
 
-        $pdf = PDF::loadView('Mahasiswa.SkPenilaian.skPDF', compact('request', 'tanggal_sk', 'keterangan', 'nilai_huruf'))->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'sans-serif']);
+        $signaturePath = public_path('/signatures/' . $matkul->user->username . '.png');
+        $signatureBase64 = null;
+
+        if (File::exists($signaturePath)) {
+            $fileContents = File::get($signaturePath);
+            $signatureBase64 = base64_encode($fileContents);
+            $decoded = base64_decode($signatureBase64, true);
+            if ($decoded !== false && $decoded !== null && strlen($decoded) > 0) {
+                $signaturePath = '/signatures/' . $matkul->user->username . '.png';
+            } else {
+                $signaturePath = null;
+            }
+        } else {
+            $signaturePath = null;
+        }
+
+        $pdf = PDF::loadView('Mahasiswa.SkPenilaian.skPDF', compact('request', 'tanggal_sk', 'keterangan', 'nilai_huruf', 'signaturePath'))->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'sans-serif']);
         return $pdf->download("Surat Penilaian.pdf");
     }
 
