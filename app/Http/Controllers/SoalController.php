@@ -130,7 +130,7 @@ class SoalController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'matkul_id' => 'required',
-            'soal' => 'required|string|max:255',
+            'soal' => 'required',
             'tingkat' => 'required',
             'gambar_soal' => 'mimes:png,jpg,jpeg|max:10240',
             'jawaban.*' => 'required|string|max:255',

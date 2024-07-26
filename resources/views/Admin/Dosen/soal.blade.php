@@ -19,7 +19,7 @@
                 <div class="d-flex">
                     <h5>Soal {{ $matkul->nama }}</h5>
                 </div>
-                <div class="table-responsive text-nowrap mt-4">
+                <div class="table-responsive mt-4">
                     <table class="table table-hover" id="table1">
                         <thead>
                             <tr>
@@ -33,7 +33,7 @@
                             @foreach ($matkul->soal as $item)
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td class="text-center soal-td">{!! $item->soal !!}</td>
+                                    <td class="d-flex align-items-center justify-content-center text-center soal-td">{!! $item->soal !!}</td>
                                     <td class="text-center">{{ $item->tingkat }}</td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
@@ -58,7 +58,7 @@
                                                                 <div class="mb-3 jawaban-item">
                                                                     <label class="form-label">Jawaban {{ chr(65 + $index) }}
                                                                         :</label>
-                                                                    <textarea disabled class="form-control" cols="15" rows="2">{{ $jawab->jawaban }}</textarea>
+                                                                    <textarea class="form-control" cols="15" rows="2">{{ $jawab->jawaban }}</textarea>
                                                                     <div class="mt-3">
                                                                         <label class="form-label">Gambar</label>
                                                                         <input type="hidden" name="gambar_jawaban_lama[]"
@@ -80,7 +80,7 @@
                                                             <div id="jawaban-benar-container">
                                                                 @foreach ($item->jawaban as $index => $jawab)
                                                                     <div class="form-check form-check-inline">
-                                                                        <input disabled class="form-check-input" type="radio"
+                                                                        <input class="form-check-input" type="radio"
                                                                             name="benar{{ $item->id }}"
                                                                             id="radio{{ chr(65 + $index) }}"
                                                                             value="{{ chr(65 + $index) }}"
