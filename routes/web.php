@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth', 'OnlyAdmin']], function () {
     Route::get('/admin/dosen/delete/{id}', [DosenController::class, 'destroy']);
     Route::get('/admin/dosen/mahasiswa-diuji/{dosen}/{id}', [DosenController::class, 'lihat_mahasiswa_diuji']);
     Route::get('/admin/dosen/bank-soal/{id}', [DosenController::class, 'lihat_bank_soal']);
+    Route::get('/admin/dosen/bank-soal/edit/{id}', [DosenController::class, 'edit_bank_soal']);
+    Route::post('/admin/dosen/bank-soal/edit/{id}', [DosenController::class, 'update_bank_soal']);
 
     // matkul
     Route::get('/admin/matkul', [MatkulController::class, 'index']);

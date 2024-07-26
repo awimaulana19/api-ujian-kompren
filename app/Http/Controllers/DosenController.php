@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Soal;
 use App\Models\User;
 use App\Models\Matkul;
 use GuzzleHttp\Client;
+use App\Models\Jawaban;
 use App\Models\Matakuliah;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -177,6 +179,58 @@ class DosenController extends Controller
         $matkul = Matkul::where('id', $id)->first();
 
         return view('Admin.Dosen.soal', compact('matkul'));
+    }
+
+    public function edit_bank_soal($id)
+    {
+        $soal = Soal::findOrFail($id);
+        $jawaban = Jawaban::where('soal_id', $id)->get();
+        $matkul = Matkul::findOrFail($soal->matkul_id);
+
+        return view('Admin.Dosen.jawaban', compact('soal', 'matkul', 'jawaban', 'id'));
+    }
+
+    public function update_bank_soal(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'matkul_id' => 'required',
+            'soal' => 'required|string|max:255',
+            'tingkat' => 'required',
+            'gambar_soal' => 'mimes:png,jpg,jpeg|max:10240',
+            'jawaban.*' => 'required|string|max:255', // Validasi untuk jawaban
+            'gambar_jawaban.*' => 'mimes:png,jpg,jpeg|max:10240', // Validasi untuk gambar jawaban
+            'benar' => 'required|string', // Validasi untuk jawaban benar
+        ]);
+
+        $soal = Soal::findOrFail($id);
+        $soal->matkul_id = $validatedData['matkul_id'];
+        $soal->soal = $validatedData['soal'];
+        $soal->tingkat = $validatedData['tingkat'];
+        if ($request->file('gambar_soal')) {
+            $soal->gambar_soal = $request->file('gambar_soal')->store('gambar-soal');
+        }
+        $soal->save();
+
+        $soal->jawaban()->delete();
+
+        foreach ($request->jawaban as $index => $jawabanText) {
+            $jawaban = new Jawaban();
+            $jawaban->soal_id = $soal->id;
+            $jawaban->jawaban = $jawabanText;
+            $jawaban->is_correct = ($request->benar == chr(65 + $index)) ? true : false;
+
+            if ($request->file('gambar_jawaban') && isset($request->file('gambar_jawaban')[$index])) {
+                $jawaban->gambar_jawaban = $request->file('gambar_jawaban')[$index]->store('gambar-jawaban');
+            } else {
+                if (isset($request->gambar_jawaban_lama[$index])) {
+                    $jawaban->gambar_jawaban = $request->gambar_jawaban_lama[$index];
+                }
+            }
+            $jawaban->save();
+        }
+
+        Alert::success('Success', 'Soal dan jawaban berhasil diperbarui');
+        return redirect('/admin/dosen/bank-soal/'. $request->matkul_id)->with('success', 'Soal dan jawaban berhasil diperbarui.');
     }
 
     public function pdf_api(Request $request)
