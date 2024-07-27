@@ -78,7 +78,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-end gap-2">
-                        <a href="/dosen/matkul/{{ $matkul->id }}" class="btn btn-secondary">Kembali</a>
+                        <a href="/admin/dosen/bank-soal/{{ $matkul->id }}" class="btn btn-secondary">Kembali</a>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
