@@ -151,8 +151,7 @@
                                                         <div class="mb-3">
                                                             <label for="wa" class="form-label">No Whatsapp</label>
                                                             <input required type="text" id="wa" name="wa"
-                                                                class="form-control"
-                                                                value="{{ $item->wa }} />
+                                                                class="form-control" value="{{ $item->wa }}" />
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="password" class="form-label">Password</label>
