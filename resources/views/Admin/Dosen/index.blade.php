@@ -39,6 +39,11 @@
                                             placeholder="Masukkan Username/Nip" />
                                     </div>
                                     <div class="mb-3">
+                                        <label for="wa" class="form-label">No Whatsapp</label>
+                                        <input required type="text" id="wa" name="wa" class="form-control"
+                                            placeholder="Masukkan No Whatsapp" />
+                                    </div>
+                                    <div class="mb-3">
                                         <label for="password" class="form-label">Password</label>
                                         <input type="password" id="password" name="password" class="form-control"
                                             placeholder="Masukkan Password" />
@@ -65,7 +70,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="table-responsive text-nowrap mt-4">
+                <div class="table-responsive mt-4">
                     <table class="table table-hover" id="table1">
                         <thead>
                             <tr>
@@ -145,8 +150,9 @@
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="wa" class="form-label">No Whatsapp</label>
-                                                            <input required type="text" id="wa" name="wa" class="form-control"
-                                                                placeholder="Masukkan No Whatsapp" />
+                                                            <input required type="text" id="wa" name="wa"
+                                                                class="form-control"
+                                                                value="{{ $item->wa }} />
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="password" class="form-label">Password</label>
